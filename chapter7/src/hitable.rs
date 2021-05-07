@@ -82,7 +82,7 @@ fn random_in_unit_sphere() -> Vec3 {
 
 pub fn color(r: &Ray, world: &HitableList) -> Vec3 {
     let mut rec = HitRecord::default();
-    if world.hit(r, 0.0, std::f32::MAX, &mut rec){
+    if world.hit(r, 0.001, std::f32::MAX, &mut rec){
         let target = rec.p + rec.normal + random_in_unit_sphere();
         return color(&Ray::new(rec.p, target - rec.p), world) * 0.5;
     } else {

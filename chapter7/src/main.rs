@@ -18,7 +18,7 @@ fn main() -> std::io::Result<()>{
     let ny = 100;
     let ns = 100;
 
-    let file = File::create("test.ppm")?;
+    let file = File::create("test2.ppm")?;
     let mut file = LineWriter::new(file);
     file.write_all(b"P3\r\n")?;
     file.write_all(format!("{} {}\r\n", nx, ny).as_bytes())?;
@@ -50,6 +50,7 @@ fn main() -> std::io::Result<()>{
                 col += color(&r, &hitables);                
             }
             col /= ns as f32;
+            col = Vec3::new(col.x.sqrt(), col.y.sqrt(), col.z.sqrt());
             col *= 255.99;
             let ir = col.x.trunc() as u8;
             let ig = col.y.trunc() as u8;
