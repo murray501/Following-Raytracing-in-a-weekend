@@ -21,7 +21,7 @@ fn main() -> std::io::Result<()>{
     let ny = 100;
     let ns = 100;
 
-    let file = File::create("test.ppm")?;
+    let file = File::create("test2.ppm")?;
     let mut file = LineWriter::new(file);
     file.write_all(b"P3\r\n")?;
     file.write_all(format!("{} {}\r\n", nx, ny).as_bytes())?;
@@ -39,10 +39,10 @@ fn main() -> std::io::Result<()>{
     Rc::new(Lambertian::new(Vec3::new(0.8, 0.8, 0.0))));
     
     let sphere3 = Sphere::new(Vec3::new(1.,0.,-1.), 0.5,
-    Rc::new(Metal::new(Vec3::new(0.8, 0.6, 0.2))));
+    Rc::new(Metal::new(Vec3::new(0.8, 0.6, 0.2), 1.0)));
 
     let sphere4 = Sphere::new(Vec3::new(-1.,0.,-1.),0.5,
-Rc::new(Metal::new(Vec3::new(0.8, 0.8, 0.8))));
+Rc::new(Metal::new(Vec3::new(0.8, 0.8, 0.8), 1.0)));
     
     hitables.list.push(Box::new(sphere1));
     hitables.list.push(Box::new(sphere2));  
