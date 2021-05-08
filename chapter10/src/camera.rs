@@ -20,14 +20,19 @@ impl Default for Camera {
 }
 
 impl Camera {
-    pub fn new(vfov: f32, aspect: f32) -> Self {
+    pub fn new(lookfrom: Vec3, lookat: Vec3, vup: Vec3, vfov: f32, aspect: f32) -> Self {
         let theta = vfov * std::f32::consts::PI;
         let half_height = (theta * 0.5).tan();
         let half_width = aspect * half_height;
-        let lower_left_corner = Vec3::new(-half_width, -half_height, -1.0);
-        let horizontal = Vec3::new(2.0*half_width, 0., 0.);
-        let vertical = Vec3::new(0., 2.0 * half_height, 0.0);
-        let origin = Vec3::new(0., 0., 0.);
+        let origin = lookfrom;
+        let w = (lookfrom - lookat).normalize();
+        let u = vup.cross(w).normalize();
+        let v = w.cross(u);
+
+        let lower_left_corner = origin - u* half_width - v * half_height - w;
+        let horizontal = u * (half_width * 2.0);
+        let vertical = v * (half_height * 2.0);
+        
         Self {
             origin, lower_left_corner, horizontal, vertical
         }

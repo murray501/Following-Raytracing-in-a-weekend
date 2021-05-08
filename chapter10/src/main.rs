@@ -21,25 +21,41 @@ fn main() -> std::io::Result<()>{
     let ny = 100;
     let ns = 100;
 
-    let file = File::create("test.ppm")?;
+    let file = File::create("test2.ppm")?;
     let mut file = LineWriter::new(file);
     file.write_all(b"P3\r\n")?;
     file.write_all(format!("{} {}\r\n", nx, ny).as_bytes())?;
     file.write_all(b"255\r\n")?;
-
-    let r = (std::f32::consts::PI * 0.25).cos();
+    let lower_left_corner = Vec3::new(-2.0, -1.0, -1.0);
+    let horizontal = Vec3::new(4.0, 0.0, 0.0);
+    let vertical = Vec3::new(0.0, 2.0, 0.0);
+    let origin = Vec3::new(0.0, 0.0, 0.0);
 
     let mut hitables = HitableList::default();
-    let sphere1 = Sphere::new(Vec3::new(-r,0.,-1.), r,
-        Rc::new(Lambertian::new(Vec3::new(0., 0., 1.))));
+    let sphere1 = Sphere::new(Vec3::new(0.,0.,-1.), 0.5,
+        Rc::new(Lambertian::new(Vec3::new(0.1, 0.2, 0.5))));
 
-    let sphere2 = Sphere::new(Vec3::new(r,0. ,-1.),r,
-    Rc::new(Lambertian::new(Vec3::new(1., 0., 0.))));
+    let sphere2 = Sphere::new(Vec3::new(0.,-100.5,-1.),100.0,
+    Rc::new(Lambertian::new(Vec3::new(0.8, 0.8, 0.0))));
+    
+    let sphere3 = Sphere::new(Vec3::new(1.,0.,-1.), 0.5,
+    Rc::new(Metal::new(Vec3::new(0.8, 0.6, 0.2), 0.0)));
+
+    let sphere4 = Sphere::new(Vec3::new(-1.,0.,-1.),0.5,
+Rc::new(Dielectric::new(1.5)));
+
+    let sphere5 = Sphere::new(Vec3::new(-1.,0.,-1.),-0.45,
+Rc::new(Dielectric::new(1.5)));
     
     hitables.list.push(Box::new(sphere1));
     hitables.list.push(Box::new(sphere2));  
- 
-    let camera = Camera::new(0.5, nx as f32 / ny as f32);
+    hitables.list.push(Box::new(sphere3));    
+    hitables.list.push(Box::new(sphere4)); 
+    hitables.list.push(Box::new(sphere5));      
+
+    let camera = Camera::new(Vec3::new(-0.5,0.5,0.25),
+            Vec3::new(0.,0., -1.), Vec3::new(0.,1.,0.), 0.25,
+            nx as f32 / ny as f32);
     let mut rng = rand::thread_rng();
     
     for j in (0..ny).rev() {
