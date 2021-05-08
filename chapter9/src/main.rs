@@ -21,7 +21,7 @@ fn main() -> std::io::Result<()>{
     let ny = 100;
     let ns = 100;
 
-    let file = File::create("test.ppm")?;
+    let file = File::create("test2.ppm")?;
     let mut file = LineWriter::new(file);
     file.write_all(b"P3\r\n")?;
     file.write_all(format!("{} {}\r\n", nx, ny).as_bytes())?;
@@ -43,11 +43,15 @@ fn main() -> std::io::Result<()>{
 
     let sphere4 = Sphere::new(Vec3::new(-1.,0.,-1.),0.5,
 Rc::new(Dielectric::new(1.5)));
+
+    let sphere5 = Sphere::new(Vec3::new(-1.,0.,-1.),-0.45,
+Rc::new(Dielectric::new(1.5)));
     
     hitables.list.push(Box::new(sphere1));
     hitables.list.push(Box::new(sphere2));  
     hitables.list.push(Box::new(sphere3));    
-    hitables.list.push(Box::new(sphere4));      
+    hitables.list.push(Box::new(sphere4)); 
+    hitables.list.push(Box::new(sphere5));      
 
     let camera = Camera::default();
     let mut rng = rand::thread_rng();
